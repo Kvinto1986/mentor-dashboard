@@ -1,28 +1,46 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Select from 'react-select';
+import './components/style.css';
+import mentorsDashboard from "./xlsx-to-json module/mentorsDashboard"
+import Table from './components/table';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload and relax.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+const options = mentorsDashboard.map(function (elem) {
+    const objElem = {
+        value: elem.mentorGitName, label: elem.mentorGitName + ' (' + elem.mentorName + ')'
+    };
+    return objElem
+
+});
+
+class App extends React.Component {
+    state = {
+        selectedOption: null
+    };
+
+    handleChange = (selectedOption) => {
+
+        this.setState({selectedOption});
+
+    };
+
+    render() {
+        const {selectedOption} = this.state;
+
+        return (
+            <div className="mainContainer">
+                <h1>Enter your GitHub login</h1>
+                <Select
+                    className="select"
+                    value={selectedOption}
+                    onChange={this.handleChange}
+                    options={options}
+                />
+                <Table
+                    selectedOption={selectedOption}
+                />
+            </div>
+        );
+    }
 }
 
 export default App;
